@@ -1045,7 +1045,7 @@
 
 
                 // set the dimensions and margins of the graph
-                var margin = {top: 50, right: 20, bottom: 150, left: 50},
+                var margin = {top: 50, right: 20, bottom: 150, left: 100},
                     width = 960 - margin.left - margin.right,
                     height = innerWidth/10*4 - margin.top - margin.bottom;
 
@@ -1130,7 +1130,7 @@
 
                     })
                     .on("mousemove", function(d) {
-                        return tooltip_bar.style("top", (d3.event.pageY-40)+"px").style("left",(d3.event.pageX)+"px");
+                        return tooltip_bar.style("top", (d3.event.pageY-40)+"px").style("left",(d3.event.pageX/2)+"px");
                     })
                     .on("mouseout", function(d){
 
@@ -1178,137 +1178,15 @@
 
                 // add the y Axis
                 svg.append("g")
+                    .attr("id","yaxis")
                     .call(d3.axisLeft(y).tickSize(-width))
                    //很关键的，不设置的话就是一坨
 
                 d3.selectAll(".tick").select("line")
                     .attr("opacity","0.3")
                     .attr("stroke-dasharray","5,5")   
-                //    *************************__________draw download bar chart_____________***********************************
 
-
-            // var svg_download = d3.select(".download_bar").append("svg")
-            //     .attr("class","download_bar")
-            //     .attr("width", width + margin.left + margin.right)
-            //     .attr("height", height + margin.top + margin.bottom)
-            // .append("g")
-            //     .attr("transform", 
-            //         "translate(" + margin.left + "," + margin.top + ")");
-
-
-            // var tooltip_bar_download = d3.select(".download_bar")
-            //     .append("div")
-            //     .attr("class","tooltip_bar_download")
-            //     .style("position", "absolute")
-            //     .style("z-index", "10")
-            //     .style("visibility", "hidden")
-            //     .style("color", "white")
-            //     .style("padding", "8px")
-            //     .style("cursor", "default")
-            //     .style("background-color", "rgba(0, 0, 0, 0.75)")
-            //     .style("border-radius", "6px")
-            //     .style("font", "12px sans-serif")
-            //     .text("tooltipasd");
-
-
-
-            // // Scale the range of the data in the domains
-            // x.domain(download_amount.map(function(d) { return d.Category; }));
-            // y.domain([0, d3.max(download_amount, function(d) { return d.value; })]);
-            // // // Scale the range of the data in the domains
-            // // x.domain(data_all.children.map(function(d) { return d.Category; }));
-            // // y.domain([0, d3.max(data_all.children, function(d) { return d.Count; })]);
-
-            // console.log(data_all.children);
-            
-            // // append the rectangles for the bar chart
-            // svg_download.selectAll(".bar")
-            //     .data(download_amount)
-            //     .enter().append("rect")
-            //     .attr("class", "bar")
-            //     .attr("x", function(d) { return x(d.Category); })
-            //     .attr("width", x.bandwidth())
-            //     .attr("y", function(d) { 
-            //         if (d.value<10)
-            //         {return y(30);}
-                    
-            //         return y(d.value); 
-            //     })
-            //     .attr("height", function(d) {
-                    
-            //         if (d.value<10)
-            //         {return height - y(30);}
-                    
-            //         return height - y(d.value); 
-                
-            //     })
-            //     .style("fill", function(d,i) {return colorScale(d.Category);})
-            //     .on("mouseover", function(d) {
-            //         tooltip_bar_download.text(": " + d.Category + " ," + d.value );
-            //             tooltip_bar_download.style("visibility", "visible");
-            //             d3.select(this)
-            //                 .attr("width", x.bandwidth()+10)
-            //                 .attr("height", function(d) { return height - y(d.value) +10; })
-            //                 .style("fill", "rgb(111, 111, 111)" )
-            //                 .style("stroke", "rgb(255, 0, 0)" )
-            //                 .style("stroke-width", "2" )
-            //                 // .style("postion", "absolute")
-            //                 // .style("z-index", "10");
-            
-
-            //     })
-            //     .on("mousemove", function(d) {
-            //         return tooltip_bar_download.style("top", (d3.event.pageY-40)+"px").style("left",(d3.event.pageX)+"px");
-            //     })
-            //     .on("mouseout", function(d){
-
-            //         d3.select(this)
-            //             .attr("width", x.bandwidth())
-            //             .attr("height", function(d) { 
-            //                 if (d.value<10){return height - y(30);}
-
-            //                 return height - y(d.value) ; 
-                        
-            //             })
-            //             .style("fill", function(d,i) {return colorScale(d.Category);})
-            //             .style("stroke", null )
-            //             .style("stroke-width", null );
-
-            //         return tooltip_bar_download.style("visibility", "hidden");
-                    
-            //     });
-
-
-
-
-            // // add the x Axis
-            // svg_download.append("g")
-            //     .attr("transform", "translate(0," + height + ")")
-            //     .call(d3.axisBottom(x))
-            //     .selectAll("text")	
-            //     .style("text-anchor", "end")
-            //     .attr("dx", "-.8em")
-            //     .attr("dy", ".15em")
-            //     .attr("transform", "rotate(-65)");
-
-  
-
-            // svg_download.append("text")
-            //     .attr("x", width/2)
-            //     .attr("y", -margin.top/3)
-            //     .attr("class", "title")
-            //     .attr("id", "download_title")
-            //     .style("text-anchor", "middle")
-            //     .style("font-size", "2rem")
-            //     .style("font-weight", "600")
-            //     .attr("text-decoration", "underline")
-            //     .text("Total number of install by Category");
                
-            // // add the y Axis
-            // svg_download.append("g")
-            //     .call(d3.axisLeft(y));
-
-
                 //    *************************__________ENDDDDD_____________***********************************
                 // add a change event handler 
                 d3.select("#filter").on("change", function() {
@@ -1330,6 +1208,7 @@
                         console.log("ssss")
 
                         console.log(cate_amount)
+
                         var halo = d3.selectAll(".bar")
                             .data(cate_amount)
                             
@@ -1350,6 +1229,15 @@
                                 return height - y(d.value); 
                             
                             })
+
+                            var ya = d3.selectAll("#yaxis").update()                            
+                            .call(d3.axisLeft(y).tickSize(-width))
+
+                            d3.selectAll(".tick").select("line")
+                                .attr("opacity","0.3")
+                                .attr("stroke-dasharray","5,5")   
+
+                            ya.exit().remove()
 
                         // halo.select("#title")
                         //     .transition().duration(1000)
@@ -1388,6 +1276,19 @@
                             
                             })
                         
+                            var ya =d3.selectAll("#yaxis")                            
+                            .call(d3.axisLeft(y).tickSize(-width))
+
+
+                            
+                            d3.selectAll(".tick").select("line")
+                                .attr("opacity","0.3")
+                                .attr("stroke-dasharray","5,5")  
+
+
+
+                            ya.exit().remove()
+
                         // halo.select("#title")
                         //     .transition().duration(1000)
                         //     .text("Total number of install by Category");
