@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+
+<html>
+
+    <meta charset="utf-8">
+    <title>csv load</title>
+    <style>
+
+        *{
+            background-color: #9fb8d1;
+
+        }
+        text {
+            font: 10px sans-serif;
+        }
+
+        .asd{
+            background-color: #9fb8d1;
+            border-color: aqua;
+            border-style: solid;
+            border-width: medium ;
+            text-align: left;
+            float: left;
+            display: block;
+        }
+        .asd svg{
+            position: absolute;
+
+
+            background-color: #f3f9ff;
+
+
+        }
+
+        .eee{
+            position: absolute;
+            left: 45%;
+            /* background-color: #e6e6e6; */
+            background-color: #9fb8d1;
+
+            /* border-style: dotted; */
+            /* border-width: 2px; */
+            text-align: left;
+            float: right;
+            display: block;
+
+        }
+        .eee svg{
+            /* background-color: #e6e6e6; */
+            background-color: #f3f9ff;
+
+            /* border-style: dotted; */
+            /* border-width: 2px; */
+            /* text-align: left;
+            float: right;
+            display: block; */
+
+        }
+        .download_bar{
+            /* background-color: #e6e6e6; */
+            border-style: dotted;
+            border-width: 2px;
+            text-align: left;
+            display: block;
+
+        }
+        .download_bar svg {
+            background-color: #f3f9ff;
+
+
+        }
+
+        .boxplot{
+            position: absolute;
+            left: 25%;
+            top: 95%;
+
+            background-color: #9fb8d1;
+            align-items: center;
+
+        }   
+        .btn-group  {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .btn-group .button {
+            background-color: #4285f4; /* Green */
+            border: 1px solid #4285f4;
+            color: white;
+            padding: 15px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            /* float: left; */
+        }
+
+        .btn-group .button:not(:last-child) {
+            border-right: none; /* Prevent double borders */
+        }
+
+        .btn-group .button:hover {
+            background-color: #134daa;
+            /* position: ; */
+        }
+
+        /* *************************______________bar_____________*********************************** */
+        /* .bar { fill: steelblue; } */
+
+
+    </style>
+    <body>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+        
+
+        <!-- *************************______________body_____________*********************************** -->
+        <div class ="all">
+
+            <div class="btn-group">
+                <button class="button" onclick = "Change_dataset1()">All App bubble</button>
+                <button class="button" onclick = "Change_dataset2()">App more then 1000M+</button>
+                <button class="button" onclick = "Change_cir_buble()">circlue bubble</button>
+                <a class="button" href ="correlation.html" target="_blank">Correlation</a>
+            </div>
+
+            <div class = "grah">
+                <div class="asd">
+
+                    <svg class="bubble_d1"></svg>
+                    <svg class="bubble_d2"></svg>
+                    <svg class="bubble_cir"></svg>
+        
+                </div>
+
+                <div class="eee">
+                    <select id="filter" style="position: absolute; background-color: rgb(227, 54, 233);">
+                        <option value="1" style="background-color: rgb(227, 54, 233);">1</option>
+                        <option value="2" style="background-color: rgb(227, 54, 233);">2</option>
+                      </select>
+                </div>
+            </div>
+
+ 
+
+            </div>
+            <div class="boxplot">
+                <h1 style="text-align: center; color: white;">Boxplot of Sentiment score by each category</h1>
+                <iframe width="1000" height="1000" src="boxplot.html" frameborder="0" allowfullscreen         background-color: #f3f9ff;
+                ></iframe>
+                
+            </div>
+
+
+        </div>
+
+        <!-- *************************______________bubble_____________*********************************** -->
+        <script>
+            var colorScale; 
+
+            var data_all = {children:[]};
+            var data_2 = {children:[]};
+            var data_c3 = {Name:"App" ,children:[
+
+                            { Name: "FAMILY"                   , children: []},
+                            { Name: "GAME"                     , children: []},
+                            { Name: "TOOLS"                    , children: []},
+                            { Name: "BUSINESS"                 , children: []},
+                            { Name: "MEDICAL"                  , children: []},
+                            { Name: "PERSONALIZATION"          , children: []},
+                            { Name: "PRODUCTIVITY"             , children: []},
+                            { Name: "LIFESTYLE"                , children: []},
+                            { Name: "FINANCE"                  , children: []},
+                            { Name: "SPORTS"                   , children: []},
+                            { Name: "COMMUNICATION"            , children: []},
+                            { Name: "HEALTH_AND_FITNESS"       , children: []},
+                            { Name: "PHOTOGRAPHY"              , children: []},
+                            { Name: "NEWS_AND_MAGAZINES"       , children: []},
+                            { Name: "SOCIAL"                   , children: []},
+                            { Name: "BOOKS_AND_REFERENCE"      , children: []},
+                            { Name: "TRAVEL_AND_LOCAL"         , children: []},
+                            { Name: "SHOPPING"                 , children: []},
+                            { Name: "DATING"                   , children: []},
+                            { Name: "VIDEO_PLAYERS"            , children: []},
+                            { Name: "MAPS_AND_NAVIGATION"      , children: []},
+                            { Name: "EDUCATION"                , children: []},   
+                            { Name: "FOOD_AND_DRINK"           , children: []},
+                            { Name: "ENTERTAINMENT"            , children: []},
+                            { Name: "AUTO_AND_VEHICLES"        , children: []},       
+                            { Name: "LIBRARIES_AND_DEMO"       , children: []},
+                            { Name: "WEATHER"                  , children: []},
+                            { Name: "HOUSE_AND_HOME"           , children: []},
+                            { Name: "PARENTING"                , children: []},
+                            { Name: "EVENTS"                   , children: []},
+                            { Name: "ART_AND_DESIGN"           , children: []},      
+                            { Name: "BEAUTY"                   , children: []},
+                            { Name: "COMICS"                   , children: []},
+                            { Name: "d"                        , children: []},
+                            { Name: "1.9"                      , children: []},
+                        ]
+                            };
+
+            function Change_dataset1(){
+
+                d3.select(".bubble_d1")
+                    .attr("style","display:block")
+                    .attr("style","position: center")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+
+                d3.select(".bubble_d2")
+                    .attr("style","display:none")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+                d3.select(".bubble_cir")
+                    .attr("style","display:none")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+            }
+            
+            function Change_dataset2(){
+                
+                d3.select(".bubble_d2")
+                    .attr("style","display:block")
+                    .attr("style","position: center")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+                d3.select(".bubble_d1")
+                    .attr("style","display:none")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+                d3.select(".bubble_cir")
+                    .attr("style","display:none")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+
+            }
+            function Change_cir_buble(){
+
+                d3.select(".bubble_cir")
+                    .attr("style","display:block")
+                    .attr("style","position: center")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+                d3.select(".bubble_d1")
+                    .attr("style","display:none")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+                d3.select(".bubble_d2")
+                    .attr("style","display:none")
+                    // .transition().duration(1000)
+                    // .ease(d3.easeLinear)
+
+
+            }
+
+
+            var cate_amount= [
+                                { Category: "FAMILY"                   ,value: 1818},
+                                { Category: "GAME"                     ,value: 954},
+                                { Category: "TOOLS"                    ,value: 822},
+                                { Category: "BUSINESS"                 ,value: 419},
+                                { Category: "MEDICAL"                  ,value: 395},
+                                { Category: "PERSONALIZATION"          ,value: 375},
+                                { Category: "PRODUCTIVITY"             ,value: 374},
+                                { Category: "LIFESTYLE"                ,value: 367},
+                                { Category: "FINANCE"                  ,value: 341},
+                                { Category: "SPORTS"                   ,value: 324},
+                                { Category: "COMMUNICATION"            ,value: 313},
+                                { Category: "HEALTH_AND_FITNESS"       ,value: 287},
+                                { Category: "PHOTOGRAPHY"              ,value: 279},
+                                { Category: "NEWS_AND_MAGAZINES"       ,value: 251},
+                                { Category: "SOCIAL"                   ,value: 237},
+                                { Category: "BOOKS_AND_REFERENCE"      ,value: 221},
+                                { Category: "TRAVEL_AND_LOCAL"         ,value: 219},
+                                { Category: "SHOPPING"                 ,value: 200},
+                                { Category: "DATING"                   ,value: 171},
+                                { Category: "VIDEO_PLAYERS"            ,value: 162},
+                                { Category: "MAPS_AND_NAVIGATION"      ,value: 129},
+                                { Category: "EDUCATION"                ,value: 119},   
+                                { Category: "FOOD_AND_DRINK"           ,value: 110},
+                                { Category: "ENTERTAINMENT"            ,value: 101},
+                                { Category: "AUTO_AND_VEHICLES"        ,value: 84},       
+                                { Category: "LIBRARIES_AND_DEMO"       ,value: 84},
+                                { Category: "WEATHER"                  ,value: 79},
+                                { Category: "HOUSE_AND_HOME"           ,value: 73},
+                                { Category: "PARENTING"                ,value: 60},
+                                { Category: "EVENTS"                   ,value: 64},
+                                { Category: "ART_AND_DESIGN"           ,value: 63},      
+                                { Category: "BEAUTY"                   ,value: 53},
+                                { Category: "COMICS"                   ,value: 53},
+                                { Category: "d"                        ,value: 1},
+                                { Category: "1.9"                      ,value: 1},    
+                ];
+
+
+            
+            var download_amount= [
+                                { Category: "FAMILY"                   ,value: 109777000000  },
+                                { Category: "GAME"                     ,value: 136534000000  },
+                                { Category: "TOOLS"                    ,value: 82441921752  },
+                                { Category: "BUSINESS"                 ,value: 166096000000   },
+                                { Category: "MEDICAL"                  ,value: 107868000000   },
+                                { Category: "PERSONALIZATION"          ,value: 77118420042  },
+                                { Category: "PRODUCTIVITY"             ,value: 75601543542  },
+                                { Category: "LIFESTYLE"                ,value: 136826000000   },
+                                { Category: "FINANCE"                  ,value: 138929000000   },
+                                { Category: "SPORTS"                   ,value: 88674917542  },
+                                { Category: "COMMUNICATION"            ,value: 165300000000     },
+                                { Category: "HEALTH_AND_FITNESS"       ,value: 137964000000   },
+                                { Category: "PHOTOGRAPHY"              ,value: 96200494542  },
+                                { Category: "NEWS_AND_MAGAZINES"       ,value: 61030227752  },
+                                { Category: "SOCIAL"                   ,value: 107857000000   },
+                                { Category: "BOOKS_AND_REFERENCE"      ,value: 167437000000   },
+                                { Category: "TRAVEL_AND_LOCAL"         ,value: 87676214991  },
+                                { Category: "SHOPPING"                 ,value: 98724557042  },
+                                { Category: "DATING"                   ,value: 142849000000   },
+                                { Category: "VIDEO_PLAYERS"            ,value: 64497745491  },
+                                { Category: "MAPS_AND_NAVIGATION"      ,value: 55066611042  },
+                                { Category: "EDUCATION"                ,value: 871352000    },   
+                                { Category: "FOOD_AND_DRINK"           ,value: 135173000000   },
+                                { Category: "ENTERTAINMENT"            ,value: 2869160000   },
+                                { Category: "AUTO_AND_VEHICLES"        ,value: 166974000000   },       
+                                { Category: "LIBRARIES_AND_DEMO"       ,value: 136803000000   },
+                                { Category: "WEATHER"                  ,value: 65005347752  },
+                                { Category: "HOUSE_AND_HOME"           ,value: 135475000000   },
+                                { Category: "PARENTING"                ,value: 60827280406  },
+                                { Category: "EVENTS"                   ,value: 138947000000   },
+                                { Category: "ART_AND_DESIGN"           ,value: 162706000000   },      
+                                { Category: "BEAUTY"                   ,value: 166559000000   },
+                                { Category: "COMICS"                   ,value: 165348000000   },
+                                { Category: "d"                        ,value: 1},
+                                { Category: "1.9"                      ,value: 1},
+                ];
+                
+
+            d3.csv("data/googleplaystore_v3.csv", function(error, data){
+                if (error) throw error;
+
+                data.forEach(function(dude){ 
+
+                    var amount = dude.Installs;
+                    // var amount = "100,000M"; 
+                    amount = amount.substring(0,amount.length-1);
+                    amount = numeral(amount);
+
+                //    *************************__________inset data to data_c3_____________***********************************
+                {   if(dude.Category === "FAMILY"                  ){
+                        data_c3.children[0].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="GAME"                     ){
+                        data_c3.children[1].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="TOOLS"                    ){
+                        data_c3.children[2].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="BUSINESS"                 ){
+                        data_c3.children[3].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="MEDICAL"                  ){
+                        data_c3.children[4].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="PERSONALIZATION"          ){
+                        data_c3.children[5].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="PRODUCTIVITY"             ){
+                        data_c3.children[6].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="LIFESTYLE"                ){
+                        data_c3.children[7].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="FINANCE"                  ){
+                        data_c3.children[8].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="SPORTS"                   ){
+                        data_c3.children[9].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="COMMUNICATION"            ){
+                        data_c3.children[10].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="HEALTH_AND_FITNESS"       ){
+                        data_c3.children[11].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="PHOTOGRAPHY"              ){
+                        data_c3.children[12].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="NEWS_AND_MAGAZINES"       ){
+                        data_c3.children[13].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="SOCIAL"                   ){
+                        data_c3.children[14].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="BOOKS_AND_REFERENCE"      ){
+                        data_c3.children[15].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="TRAVEL_AND_LOCAL"         ){
+                        data_c3.children[16].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="SHOPPING"                 ){
+                        data_c3.children[17].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="DATING"                   ){
+                        data_c3.children[18].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="VIDEO_PLAYERS"            ){
+                        data_c3.children[19].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="MAPS_AND_NAVIGATION"      ){
+                        data_c3.children[20].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="EDUCATION"                ){
+                        data_c3.children[21].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    } 
+                    if(dude.Category ==="FOOD_AND_DRINK"           ){
+                        data_c3.children[22].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="ENTERTAINMENT"            ){
+                        data_c3.children[23].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="AUTO_AND_VEHICLES"        ){
+                        data_c3.children[24].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }       
+                    if(dude.Category ==="LIBRARIES_AND_DEMO"       ){
+                        data_c3.children[25].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="WEATHER"                  ){
+                        data_c3.children[26].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="HOUSE_AND_HOME"           ){
+                        data_c3.children[27].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="PARENTING"                ){
+                        data_c3.children[28].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="EVENTS"                   ){
+                        data_c3.children[29].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="ART_AND_DESIGN"           ){
+                        data_c3.children[30].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }      
+                    if(dude.Category ==="BEAUTY"                   ){
+                        data_c3.children[31].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="COMICS"                   ){
+                        data_c3.children[32].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="d"                        ){
+                        data_c3.children[33].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                    if(dude.Category ==="1.9"                      ){
+                        data_c3.children[34].children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+                    }
+                }
+                //    *************************__________inset data to data 2_____________***********************************
+                    if(amount._value >= 1000000000){
+                        data_2.children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+
+                    };
+                //    *************************__________inset data to data all_____________***********************************
+                    data_all.children.push({Name        :dude.App,
+                                            Andriod_ver :dude[0],
+                                            Category    :dude.Category,
+                                            Count       :amount._value,
+                                            Genres      :dude.Genres,
+                                            Price       :dude.Price,
+                                            Rating      :dude.Rating,
+                                            Reviews     :dude.Reviews,
+                                            Size        :dude.Size,
+                                            Type        :dude.Type,
+
+                                            });
+
+                })
+
+
+                var color = d3.scaleOrdinal(d3.schemeCategory20);
+                var map1 = cate_amount.map(x => x.Category);
+
+                colorScale = d3.scaleOrdinal()
+                            .range(d3.schemeCategory20)
+                            .domain(map1)
+
+
+                draw_bublle(data_all,".bubble_d1");
+                draw_bublle(data_2,".bubble_d2");
+
+                // d3.select(".bubble_d1")
+                //     .attr("style","display:"+null)
+                d3.select(".bubble_d2")
+                    .attr("style","display:none")
+
+                
+
+                //    *************************__________draw circle bubble_____________***********************************
+
+
+                var tooltip_cir_buble = d3.select(".asd")
+                    .append("div")
+                    .attr("class","tooltip_cir_buble")
+                    .style("position", "absolute")
+                    .style("z-index", "10")
+                    .style("visibility", "hidden")
+                    .style("color", "white")
+                    .style("padding", "8px")
+                    .style("cursor", "default")
+                    .style("background-color", "rgba(0, 0, 0, 0.75)")
+                    .style("border-radius", "6px")
+                    .style("font", "12px sans-serif")
+                    .text("tooltip_cir_buble");
+
+
+                var margin_bubble = {top: 40, right: 10, bottom: 10, left: 10};
+
+                var diameter = innerWidth/10*4;
+
+
+                var svg_cir_bubble = d3.select(".asd").select(".bubble_cir")
+                .attr("width", diameter+ margin_bubble.left + margin_bubble.right)
+                .attr("height", diameter+ margin_bubble.top + margin_bubble.bottom)
+                .append("g")
+                .attr("class", "cir_bubble")
+                .attr("transform","translate(" + margin_bubble.left + "," + margin_bubble.top + ")");
+
+                svg_cir_bubble.append("text")
+                    .attr("x", diameter/2)
+                    .attr("y", 0)
+                    .attr("class", "title")
+                    .attr("id", "cir_bubble_title")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "2rem")
+                    .style("font-weight", "600")
+                    .attr("text-decoration", "underline")
+                    .text("All App group by catergory");
+
+                    
+
+
+                var packLayout_circle = d3.pack()
+                .size([diameter, diameter])
+                .padding(10)
+
+                var d3_rootNode_circle = d3.hierarchy(data_c3)
+
+                d3_rootNode_circle.sum(function(d) {
+                    return d.Count;
+                });
+
+                packLayout_circle(d3_rootNode_circle);
+                
+                var d3_nodes_circle = svg_cir_bubble.selectAll('g')
+                    .data(d3_rootNode_circle.descendants())
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d) {return 'translate(' + [d.x, d.y] + ')'})
+
+                d3_nodes_circle.append('g')
+                    .append('circle')
+                    .attr('r', function(d) { return d.r+1.5; })
+                    .style("fill", function(d,i) {
+                        return colorScale(d.data.Category);
+                    })
+                    .attr("fill-opacity","0.8")   //很关键的，不设置的话就是一坨
+                    .on("mouseover", function(d) {
+
+                        if(d.children === undefined){
+                            tooltip_cir_buble.text(d.data.Name +", " + d.data.Category + " ," + d.value );
+                            tooltip_cir_buble.style("visibility", "visible");
+                            d3.select(this)
+                                .attr("width", x.bandwidth()+10)
+                                .attr("height", function(d) { return height - y(d.value) +10; })
+                                .style("fill", "rgb(111, 111, 111)" )
+                                .style("stroke", "rgb(255, 0, 0)" )
+                                .style("stroke-width", "2" )
+                                .style("postion", "absolute")
+                                .style("z-index", "10");
+                        }else{
+                            return null;
+                        }
+
+                       
+                
+
+                    })
+                    .on("mousemove", function(d) {
+                        return tooltip_cir_buble.style("top", (d3.event.pageY-40)+"px").style("left",(d3.event.pageX)+"px");
+                    })
+                    .on("mouseout", function(d){
+
+                        
+                        if(d.children === undefined){
+                            d3.select(this)
+                            .attr("width", x.bandwidth())
+                            .attr("height", function(d) { 
+                                if (d.value<10){return height - y(30);}
+
+                                return height - y(d.value) ; 
+                            
+                            })
+                            .style("fill", function(d,i) {return colorScale(d.data.Category);})
+                            .style("stroke", null )
+                            .style("stroke-width", null );
+
+                            return tooltip_cir_buble.style("visibility", "hidden");
+                        }else{
+                            return null;
+                        }
+
+    
+                        
+                    });
+                    // return d.data.Name.substring(0, d.r / 3);
+
+
+
+                d3_nodes_circle.append('g')
+                    .append('text')
+                    // .attr("style","position: absolute")
+                    // .attr("style","z-index:10")
+                    // .attr("style","font-weight: 450")
+                    // .attr("style","font-size: medium")
+                    // .attr("opacity",1)
+                    .attr('dy', (function(d) {
+                        return d.children === undefined ? 4 :  +d.r;
+                    }))
+                    .attr('transform',(function(d) {
+                        return 'translate(' + [-(d.r/2), 0] + ')';
+                    }))
+                    
+                    
+                    .text(function(d) {
+                        return d.children === undefined ? null :  d.data.Name;
+                    })
+
+                    d3.select(".bubble_cir")
+                    .attr("style","display:none")
+
+
+                //    *************************__________draw bar chart_____________***********************************
+
+
+                // set the dimensions and margins of the graph
+                var margin = {top: 50, right: 20, bottom: 150, left: 50},
+                    width = 960 - margin.left - margin.right,
+                    height = innerWidth/10*4 - margin.top - margin.bottom;
+
+                // set the ranges
+                var x = d3.scaleBand()
+                        .range([0, width])
+                        .padding(0.1);
+
+                var y = d3.scaleLinear()
+                        .range([height, 0]);
+                        
+                // append the svg object to the body of the page
+                // append a 'group' element to 'svg'
+                // moves the 'group' element to the top left margin
+                var svg = d3.select(".eee").append("svg")
+                    .attr("class","Allapp")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                    .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+
+
+                var tooltip_bar = d3.select(".eee")
+                    .append("div")
+                    .attr("class","tooltip_bar")
+                    .style("position", "absolute")
+                    .style("z-index", "10")
+                    .style("visibility", "hidden")
+                    .style("color", "white")
+                    .style("padding", "8px")
+                    .style("cursor", "default")
+                    .style("background-color", "rgba(0, 0, 0, 0.75)")
+                    .style("border-radius", "6px")
+                    .style("font", "12px sans-serif")
+                    .text("tooltipasd");
+
+
+
+                // Scale the range of the data in the domains
+                x.domain(cate_amount.map(function(d) { return d.Category; }));
+                y.domain([0, d3.max(cate_amount, function(d) { return d.value; })]);
+                // // Scale the range of the data in the domains
+                // x.domain(data_all.children.map(function(d) { return d.Category; }));
+                // y.domain([0, d3.max(data_all.children, function(d) { return d.Count; })]);
+
+                console.log(data_all.children);
+                
+                // append the rectangles for the bar chart
+                svg.selectAll(".bar")
+                    .data(cate_amount)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function(d) { return x(d.Category); })
+                    .attr("width", x.bandwidth())
+                    .attr("y", function(d) { 
+                        if (d.value<10)
+                        {return y(30);}
+                        
+                        return y(d.value); 
+                    })
+                    .attr("height", function(d) {
+                        
+                        if (d.value<10)
+                        {return height - y(30);}
+                        
+                        return height - y(d.value); 
+                    
+                    })
+                    .style("fill", function(d,i) {return colorScale(d.Category);})
+                    .on("mouseover", function(d) {
+                        
+                        tooltip_bar.text(": " + d.Category + " ," + d.value );
+                            tooltip_bar.style("visibility", "visible");
+                            d3.select(this)
+                                .attr("width", x.bandwidth()+10)
+                                .attr("height", function(d) { return height - y(d.value) +10; })
+                                .style("fill", "rgb(111, 111, 111)" )
+                                .style("stroke", "rgb(255, 0, 0)" )
+                                .style("stroke-width", "2" )
+                                // .style("postion", "absolute")
+                                // .style("z-index", "10");
+
+                    })
+                    .on("mousemove", function(d) {
+                        return tooltip_bar.style("top", (d3.event.pageY-40)+"px").style("left",(d3.event.pageX)+"px");
+                    })
+                    .on("mouseout", function(d){
+
+                        d3.select(this)
+                            .attr("width", x.bandwidth())
+                            .attr("height", function(d) { 
+                                if (d.value<10){return height - y(30);}
+
+                                return height - y(d.value) ; 
+                            
+                            })
+                            .style("fill", function(d,i) {return colorScale(d.Category);})
+                            .style("stroke", null )
+                            .style("stroke-width", null );
+
+                        return tooltip_bar.style("visibility", "hidden");
+                        
+                    });
+
+
+
+
+                // add the x Axis
+                svg.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x))
+                    .selectAll("text")	
+                    .style("text-anchor", "end")
+                    .attr("dx", "-.8em")
+                    .attr("dy", ".15em")
+                    .attr("transform", "rotate(-65)");
+
+      
+
+                svg.append("text")
+                    .attr("x", width/2)
+                    .attr("y", -margin.top/3)
+                    .attr("class", "title")
+                    .attr("id", "app_title")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "2rem")
+                    .style("font-weight", "600")
+                    .attr("text-decoration", "underline")
+                    .text("Total number of App by Category");
+
+                // add the y Axis
+                svg.append("g")
+                    .call(d3.axisLeft(y).tickSize(-width))
+                   //很关键的，不设置的话就是一坨
+
+                d3.selectAll(".tick").select("line")
+                    .attr("opacity","0.3")
+                    .attr("stroke-dasharray","5,5")   
+                //    *************************__________draw download bar chart_____________***********************************
+
+
+            // var svg_download = d3.select(".download_bar").append("svg")
+            //     .attr("class","download_bar")
+            //     .attr("width", width + margin.left + margin.right)
+            //     .attr("height", height + margin.top + margin.bottom)
+            // .append("g")
+            //     .attr("transform", 
+            //         "translate(" + margin.left + "," + margin.top + ")");
+
+
+            // var tooltip_bar_download = d3.select(".download_bar")
+            //     .append("div")
+            //     .attr("class","tooltip_bar_download")
+            //     .style("position", "absolute")
+            //     .style("z-index", "10")
+            //     .style("visibility", "hidden")
+            //     .style("color", "white")
+            //     .style("padding", "8px")
+            //     .style("cursor", "default")
+            //     .style("background-color", "rgba(0, 0, 0, 0.75)")
+            //     .style("border-radius", "6px")
+            //     .style("font", "12px sans-serif")
+            //     .text("tooltipasd");
+
+
+
+            // // Scale the range of the data in the domains
+            // x.domain(download_amount.map(function(d) { return d.Category; }));
+            // y.domain([0, d3.max(download_amount, function(d) { return d.value; })]);
+            // // // Scale the range of the data in the domains
+            // // x.domain(data_all.children.map(function(d) { return d.Category; }));
+            // // y.domain([0, d3.max(data_all.children, function(d) { return d.Count; })]);
+
+            // console.log(data_all.children);
+            
+            // // append the rectangles for the bar chart
+            // svg_download.selectAll(".bar")
+            //     .data(download_amount)
+            //     .enter().append("rect")
+            //     .attr("class", "bar")
+            //     .attr("x", function(d) { return x(d.Category); })
+            //     .attr("width", x.bandwidth())
+            //     .attr("y", function(d) { 
+            //         if (d.value<10)
+            //         {return y(30);}
+                    
+            //         return y(d.value); 
+            //     })
+            //     .attr("height", function(d) {
+                    
+            //         if (d.value<10)
+            //         {return height - y(30);}
+                    
+            //         return height - y(d.value); 
+                
+            //     })
+            //     .style("fill", function(d,i) {return colorScale(d.Category);})
+            //     .on("mouseover", function(d) {
+            //         tooltip_bar_download.text(": " + d.Category + " ," + d.value );
+            //             tooltip_bar_download.style("visibility", "visible");
+            //             d3.select(this)
+            //                 .attr("width", x.bandwidth()+10)
+            //                 .attr("height", function(d) { return height - y(d.value) +10; })
+            //                 .style("fill", "rgb(111, 111, 111)" )
+            //                 .style("stroke", "rgb(255, 0, 0)" )
+            //                 .style("stroke-width", "2" )
+            //                 // .style("postion", "absolute")
+            //                 // .style("z-index", "10");
+            
+
+            //     })
+            //     .on("mousemove", function(d) {
+            //         return tooltip_bar_download.style("top", (d3.event.pageY-40)+"px").style("left",(d3.event.pageX)+"px");
+            //     })
+            //     .on("mouseout", function(d){
+
+            //         d3.select(this)
+            //             .attr("width", x.bandwidth())
+            //             .attr("height", function(d) { 
+            //                 if (d.value<10){return height - y(30);}
+
+            //                 return height - y(d.value) ; 
+                        
+            //             })
+            //             .style("fill", function(d,i) {return colorScale(d.Category);})
+            //             .style("stroke", null )
+            //             .style("stroke-width", null );
+
+            //         return tooltip_bar_download.style("visibility", "hidden");
+                    
+            //     });
+
+
+
+
+            // // add the x Axis
+            // svg_download.append("g")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .call(d3.axisBottom(x))
+            //     .selectAll("text")	
+            //     .style("text-anchor", "end")
+            //     .attr("dx", "-.8em")
+            //     .attr("dy", ".15em")
+            //     .attr("transform", "rotate(-65)");
+
+  
+
+            // svg_download.append("text")
+            //     .attr("x", width/2)
+            //     .attr("y", -margin.top/3)
+            //     .attr("class", "title")
+            //     .attr("id", "download_title")
+            //     .style("text-anchor", "middle")
+            //     .style("font-size", "2rem")
+            //     .style("font-weight", "600")
+            //     .attr("text-decoration", "underline")
+            //     .text("Total number of install by Category");
+               
+            // // add the y Axis
+            // svg_download.append("g")
+            //     .call(d3.axisLeft(y));
+
+
+                //    *************************__________ENDDDDD_____________***********************************
+                // add a change event handler 
+                d3.select("#filter").on("change", function() {
+                    applyFilter(this.value);
+                    });
+
+
+                // call this whenever the filter changes
+                function applyFilter(value) {
+                    // filter the data
+                    // var data = tsv.filter(function(d) {return d.group === value;})
+                    console.log(document.querySelector("#app_title").innerHTML)
+
+                    x.domain(cate_amount.map(function(d) { return d.Category; }));
+                    y.domain([0, d3.max(cate_amount, function(d) { return d.value; })]);
+
+                    if(value==1){
+                        document.querySelector("#app_title").innerHTML = "Total number of App by Category";
+                        console.log("ssss")
+
+                        console.log(cate_amount)
+                        var halo = d3.selectAll(".bar")
+                            .data(cate_amount)
+                            
+                        // halo.update()
+                            .transition().duration(1000)
+                            .attr("x", function(d) { return x(d.Category); })
+                            .attr("y", function(d) { 
+                                if (d.value<10)
+                                {return y(30);}
+                                
+                                return y(d.value); 
+                            })
+                            .attr("height", function(d) {
+                                
+                                if (d.value<10)
+                                {return height - y(30);}
+                                
+                                return height - y(d.value); 
+                            
+                            })
+
+                        // halo.select("#title")
+                        //     .transition().duration(1000)
+
+                        //     .text("Total number of App by Category");
+
+                        // halo.exit()
+                        // .remove()    
+                    }
+                    if(value==2){
+
+                        document.querySelector("#app_title").innerHTML = "Total number of install by Category";
+
+                        x.domain(download_amount.map(function(d) { return d.Category; }));
+                        y.domain([0, d3.max(download_amount, function(d) { return d.value; })]);
+                        
+                        var halo = d3.selectAll(".bar")
+                            .data(download_amount)
+
+
+                        // halo.update()
+                            .transition().duration(1000)
+                            .attr("x", function(d) { return x(d.Category); })
+                            .attr("y", function(d) { 
+                                if (d.value<10)
+                                {return y(30);}
+                                
+                                return y(d.value); 
+                            })
+                            .attr("height", function(d) {
+                                
+                                if (d.value<10)
+                                {return height - y(30);}
+                                
+                                return height - y(d.value); 
+                            
+                            })
+                        
+                        // halo.select("#title")
+                        //     .transition().duration(1000)
+                        //     .text("Total number of install by Category");
+
+                        // halo.exit()
+                        // .remove()                      
+                    }
+ 
+                }
+
+            });
+            function c_barset(){
+
+            }
+            
+            var tooltip = d3.select(".asd")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .style("color", "white")
+                .style("padding", "8px")
+                .style("cursor", "default")
+                .style("background-color", "rgba(0, 0, 0, 0.75)")
+                .style("border-radius", "6px")
+                .style("font", "12px sans-serif")
+                .text("tooltipasd");
+
+            function draw_bublle(dataset, wh){
+
+                var choose = wh;
+
+                
+
+                // set the dimensions and margins of the graph
+                var margin_bubble = {top: 40, right: 10, bottom: 10, left: 10};
+
+                var diameter = innerWidth/10*4;
+
+                var bubble = d3.pack(dataset)
+                    .size([diameter, diameter])
+                    .padding(1.5);
+
+
+                var svg_bubble = d3.select(".asd").select(wh)
+                    .attr("width", diameter+ margin_bubble.left + margin_bubble.right)
+                    .attr("height", diameter+ margin_bubble.top + margin_bubble.bottom)
+                    .append("g")
+                    .attr("class", "bubble")
+                    .attr("transform","translate(" + margin_bubble.left + "," + margin_bubble.top + ")");
+
+                svg_bubble.append("text")
+                    .attr("x", diameter/2)
+                    .attr("y", 0)
+                    .attr("class", "title")
+                    .attr("id", "bubble_title")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "2rem")
+                    .style("font-weight", "600")
+                    .attr("text-decoration", "underline")
+                    .text(function(){
+                        console.log(choose)
+                        console.log(
+                            "halo"
+                        )
+                        if(choose ==".bubble_d1"){
+                            
+                            return "All App";
+                        }
+                        if(choose ==".bubble_d2"){
+                            
+                            return "App more then 1000M+ download";
+                        }
+                    });
+                
+                var nodes = d3.hierarchy(dataset)
+                    .sum(function(d) {
+ 
+                        return d.Count; 
+                        })
+                    // .sort(function(a, b) { return b.Count - a.Count; })
+                    .sort(function(a,b) {return d3.descending(a.Count,b.Count);});
+
+
+                var node = svg_bubble.selectAll(".node")
+                    .data(bubble(nodes).descendants())
+                    .enter()
+                    .filter(function(d){
+                        return  !d.children
+                    })
+                    .append("g")
+                    .attr("class", "node")
+                    .attr("transform", function(d) {
+                        return "translate(" + d.x + "," + d.y + ")";
+                    })
+                    .on("mouseover", function(d) {
+                            tooltip.text("App Name: " + d.data.Name + " installed: " + d.data.Count/1000000 + "M+");
+                            tooltip.style("visibility", "visible");
+                            d3.select(this).select("circle")
+                            .attr('r', d.r+50)
+                            // .style('z', 10)
+                            .style("stroke-width", "3" )
+                            .style("stroke", "rgb(0, 0, 0)" );
+
+                            // fill: rgb(156, 175, 132); stroke-width: 1px; stroke: rgb(126, 150, 93);
+                    })
+                    .on("mousemove", function(d) {
+                        return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                    })
+                    .on("mouseout", function(d){
+                        d3.select(this).select("circle")
+                            .attr('r', d.r)  
+                            .style("stroke-width", "1" )
+                            .style("stroke", "" );
+
+                        return tooltip.style("visibility", "hidden");
+                        
+                    });
+
+                node.exit().remove();
+
+
+                node.append("title")
+                    .text(function(d) {
+                        return d.data.Name + ": " + d.data.Count/1000000 + "M+";
+                    });
+
+                node.append("circle")
+                    .attr("r", function(d) {
+                        return d.r;
+                    })
+                    .transition()
+                    .duration(1000)
+                    // .delay(function(d, i) { 
+                    //     return d.r;
+                    // })
+                    // .attr("fill-opacity","0.5")   //很关键的，不设置的话就是一坨
+                    .style("fill", function(d,i) {
+                        // return color(i);
+                        // console.log("d.data.Name.Category");
+                        // console.log(d.data);
+                        return colorScale(d.data.Category);
+                    });
+
+                node.append("text")
+                    .attr("dy", ".2em")
+                    .attr("style", "fill:#000")
+                    .style("text-anchor", "middle")
+                    .style("cursor", "default")
+                    .text(function(d) {
+                        return d.data.Name.substring(0, d.r / 3);
+                        // return d.data.Name;
+                    })
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", function(d){
+                        return d.r/5;
+                    })
+                    .attr("fill", "white");
+
+
+                node.append("text")
+                    .attr("dy", "1.3em")
+                    .attr("style", "fill:#000")
+                    .style("text-anchor", "middle")
+                    .text(function(d) {
+                        // return d.data.Count/1000000 + "M+";
+                    })
+                    .attr("font-family",  "Gill Sans", "Gill Sans MT")
+                    .attr("font-size", function(d){
+                        return d.r/5;
+                    })
+                    .attr("fill", "white");
+
+                
+
+            }
+
+            {
+            // // Returns a flattened hierarchy containing all leaf nodes under the root.
+            // function classes(root) {
+            //     var classes = [];                                                                                        //存储结果的数组
+            //     /*自定义递归函数
+            //         *
+            //         * 第二个参数指传入的json对象
+            //         * */
+            //     function recurse(name, node) {
+            //         if (node.children)                                                                                   //如果有孩子结点 （这里的children不是自带的，是json里面有的）
+            //         {
+            //             node.children.forEach(function(child) {                                                          //将孩子结点中的每条数据
+            //                 recurse(node.name, child); })
+            //         }
+            //         else {classes.push({ className: node.name, value: node.size})};                                     //如果自身是孩子结点的，将内容压入数组
+            //     }
+            //     recurse(null, root);
+            //     return {children: classes};                                                                             //返回所有的子节点  （包含在children中）                                                                          
+            // }
+}
+        
+        </script>
+
+        <!-- *************************______________bar_____________*********************************** -->
+        <script>
+            
+        </script>
+
+
+        <!-- *************************______________circle_pack_____________*********************************** -->
+        <script>
+
+
+        </script>
+    </body>
+
+</html>
